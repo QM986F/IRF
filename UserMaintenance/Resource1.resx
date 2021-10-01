@@ -121,7 +121,7 @@
     <value>Hozzáadás</value>
   </data>
   <data name="Firstname" xml:space="preserve">
-    <value>Keresztnév</value>
+    <value>Utónév</value>
   </data>
   <data name="Lastname" xml:space="preserve">
     <value>Vezetéknév</value>
