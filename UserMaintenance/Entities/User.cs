@@ -13,7 +13,7 @@ namespace UserMaintenance.Entities
         public string Lastname { get; set; }
         public string Fullname
         {
-            get { return string.Format("{0} {1}", Lastname, Fullname); }
+            get { return string.Format("{0} {1}", Lastname, Firstname); }
         }
 
     }
