@@ -9,6 +9,6 @@ namespace Project_week05.Entities
     class PortfolioItem
     {
         public string Index { get; set; }
-        public double Volume { get; set; }
+        public decimal Volume { get; set; }
     }
 }
