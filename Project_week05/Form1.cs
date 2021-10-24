@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace Project_week05
         List<Tick> Ticks;
         PortfolioEntities context = new PortfolioEntities();
         List<PortfolioItem> Portfolio = new List<PortfolioItem>();
+        List<decimal> Profit = new List<decimal>();
         public Form1()
         {
             InitializeComponent();
@@ -23,7 +25,6 @@ namespace Project_week05
             dataGridView1.DataSource = Ticks;
             CreatePortfolio();
 
-            List<decimal> Profit = new List<decimal>();
             int interval = 30;
             DateTime startDate = (from x in Ticks select x.TradingDay).Min();
             DateTime finishDate = new DateTime(2016, 12, 30);
@@ -62,6 +63,23 @@ namespace Project_week05
             }
 
             return value;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sf = new SaveFileDialog();
+            sf.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (sf.ShowDialog()==DialogResult.OK)
+            {
+                using (StreamWriter sw = new StreamWriter(sf.FileName))
+                {
+                    sw.WriteLine("Időszak\tNyereség");
+                    for (int i = 0; i < Profit.Count; i++)
+                    {
+                        sw.WriteLine((i + 1).ToString() + "\t" + Profit[i]);
+                    }
+                }
+            }
         }
     }
 }
