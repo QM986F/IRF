@@ -22,6 +22,25 @@ namespace Project_week05
             Ticks = context.Ticks.ToList();
             dataGridView1.DataSource = Ticks;
             CreatePortfolio();
+
+            List<decimal> Profit = new List<decimal>();
+            int interval = 30;
+            DateTime startDate = (from x in Ticks select x.TradingDay).Min();
+            DateTime finishDate = new DateTime(2016, 12, 30);
+            TimeSpan z = finishDate-startDate;
+            for (int i = 0; i < z.Days - interval; i++)
+            {
+                decimal p = GetPortfolioValue(startDate.AddDays(i + interval))
+                          - GetPortfolioValue(startDate.AddDays(i));
+                Profit.Add(p);
+                Console.WriteLine(i + "" + p);
+            }
+
+            var profitSorted = (from x in Profit
+                                orderby x
+                                select x).ToList();
+
+            MessageBox.Show(profitSorted[profitSorted.Count() / 5].ToString());
         }
         private void CreatePortfolio()
         {
@@ -37,8 +56,7 @@ namespace Project_week05
             foreach (var item in Portfolio)
             {
                 var last = (from x in Ticks
-                            where item.Index == x.Index.Trim()
-                               && date <= x.TradingDay
+                            where item.Index == x.Index.Trim() && date <= x.TradingDay
                             select x).First();
                 value += (decimal)last.Price * item.Volume;
             }
