@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml;
 
 namespace Project_week06
@@ -22,6 +23,7 @@ namespace Project_week06
             Consume();
             dataGridView1.DataSource = Rates;
             Xmlprocessing();
+            Displaydatas();
         }
         private string Consume()
         {
@@ -52,6 +54,21 @@ namespace Project_week06
                     rate.Value = value / unit;
                 }
             }
+        }
+        private void Displaydatas()
+        {
+            chartRateData.DataSource = Rates;
+            var series = chartRateData.Series[0];
+            series.ChartType = SeriesChartType.Line;
+            series.XValueMember = "Date";
+            series.YValueMembers = "Value";
+            series.BorderWidth = 2;
+            var legends = chartRateData.Legends[0];
+            legends.Enabled = false;
+            var chartareas = chartRateData.ChartAreas[0];
+            chartareas.AxisX.MajorGrid.Enabled = false;
+            chartareas.AxisY.MajorGrid.Enabled = false;
+            chartareas.AxisY.IsStartedFromZero = false;
         }
     }
 }
