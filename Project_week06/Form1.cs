@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Project_week06.MnbServiceReference;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,17 @@ namespace Project_week06
         public Form1()
         {
             InitializeComponent();
+            Consume();
+        }
+        private void Consume()
+        {
+            MNBArfolyamServiceSoapClient mnbService = new MNBArfolyamServiceSoapClient();
+            GetExchangeRatesRequestBody request = new GetExchangeRatesRequestBody();
+            request.currencyNames = "EUR";
+            request.startDate = "2020-01-01";
+            request.endDate = "2020-06-03";
+            var response = mnbService.GetExchangeRates(request);
+            var result = response.GetExchangeRatesResult;
         }
     }
 }
