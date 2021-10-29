@@ -17,9 +17,21 @@ namespace Project_week06
     public partial class Form1 : Form
     {
         BindingList<RateData> Rates = new BindingList<RateData>();
+        BindingList<string> Currencies = new BindingList<string>();
         public Form1()
         {
             InitializeComponent();
+            comboBox1.DataSource = Currencies;
+            MNBArfolyamServiceSoapClient mnbService = new MNBArfolyamServiceSoapClient();
+            GetCurrenciesRequestBody request = new GetCurrenciesRequestBody();
+            var response = mnbService.GetCurrencies(request);
+            var result = response.GetCurrenciesResult;
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(result);
+            foreach (XmlElement element in xml.DocumentElement.FirstChild.ChildNodes)
+            {
+                Currencies.Add(element.InnerText);
+            }
             RefreshData();
         }
         private string Consume()
@@ -43,6 +55,10 @@ namespace Project_week06
                 Rates.Add(rate);
                 rate.Date = DateTime.Parse(element.GetAttribute("date"));
                 var childElement = (XmlElement)element.ChildNodes[0];
+                if (childElement==null)
+                {
+                    continue;
+                }
                 rate.Currency = childElement.GetAttribute("curr");
                 var unit = decimal.Parse(childElement.GetAttribute("unit"));
                 var value = decimal.Parse(childElement.InnerText);
