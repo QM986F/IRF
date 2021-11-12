@@ -99,5 +99,14 @@ namespace Project_week08
 
             button.BackColor = colorPicker.Color;
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Factory = new PresentFactory
+            {
+                color1 = button5.BackColor,
+                color2 = button6.BackColor
+            };
+        }
     }
 }
