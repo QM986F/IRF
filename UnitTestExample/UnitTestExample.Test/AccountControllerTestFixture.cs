@@ -25,20 +25,18 @@ namespace UnitTestExample.Test
             Assert.AreEqual(expectedResult, actualResult);
         }
         [
-            Test,
-            TestCase("abcdABCD", false),
+            Test,   
             TestCase("ABCD1234", false),
+            TestCase("abcdABCD", false),
             TestCase("abcd1234", false),
             TestCase("Ab1234", false),
             TestCase("Abcd1234", true)
         ]
-        public bool TestValidatePassword(string password)
+        public void TestValidatePassword(string password,bool expectedResult)
         {
-            var eightCharacter = new Regex(@"[A-Z]+");
-            var lowerCase = new Regex(@"[a-z]+");
-            var upperCase = new Regex(@"[A-Z]+");
-            var Number = new Regex(@"[0-9]+");
-            return eightCharacter.IsMatch(password) && lowerCase.IsMatch(password) && upperCase.IsMatch(password) && Number.IsMatch(password);
+            var accountController = new AccountController();
+            var actualResult = accountController.ValidatePassword(password);
+            Assert.AreEqual(expectedResult, actualResult);
         }
     }
 }
