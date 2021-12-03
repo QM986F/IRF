@@ -71,7 +71,7 @@ namespace Project_week09
                     var line = sr.ReadLine().Split(';');
                     birth.Add(new BirthProbability()
                     {
-                        BirthYear = int.Parse(line[0]),
+                        Age = int.Parse(line[0]),
                         NbrOfChildren = int.Parse(line[1]),
                         BProbability = double.Parse(line[2])
                     });
@@ -92,13 +92,37 @@ namespace Project_week09
                     death.Add(new DeathProbability()
                     {                       
                         Gender = (Gender)Enum.Parse(typeof(Gender), line[0]),
-                        BirthYear = int.Parse(line[1]),
+                        Age = int.Parse(line[1]),
                         DProbability = double.Parse(line[2])
                     });
                 }
             }
 
             return death;
+        }
+        private void Simstep(int year, Person person)
+        {
+            if (!person.IsAlive) return;
+            byte age = (byte)(year - person.BirthYear);
+            double death = (from x in DeathProbabilities
+                             where x.Gender == person.Gender && x.Age == age
+                             select x.DProbability).FirstOrDefault();
+            if (rnd.NextDouble() <= death)
+                person.IsAlive = false;
+            if (person.IsAlive && person.Gender == Gender.Female)
+            {
+                double birth = (from x in BirthProbabilities
+                                 where x.Age == age
+                                 select x.BProbability).FirstOrDefault();
+                if (rnd.NextDouble() <= birth)
+                {
+                    Person újszülött = new Person();
+                    újszülött.BirthYear = year;
+                    újszülött.NbrOfChildren = 0;
+                    újszülött.Gender = (Gender)(rnd.Next(1, 3));
+                    Population.Add(újszülött);
+                }
+            }
         }
     }
 }
