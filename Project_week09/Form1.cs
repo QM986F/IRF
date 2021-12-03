@@ -17,6 +17,8 @@ namespace Project_week09
         List<Person> Population = new List<Person>();
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
+        List<int> mPopulation = new List<int>();
+        List<int> fPopulation = new List<int>();
         Random rnd = new Random(1569);
         public Form1()
         {
@@ -24,21 +26,6 @@ namespace Project_week09
             Population = GetPopulation(@"C:\Temp\nép.csv");
             BirthProbabilities = GetBirthProbabilities(@"C:\Temp\születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\Temp\halál.csv");
-            for (int year = 2005; year <= 2024; year++)
-            {
-                for (int i = 0; i < Population.Count; i++)
-                {
-
-                }
-
-                int nbrOfMales = (from x in Population
-                                  where x.Gender == Gender.Male && x.IsAlive
-                                  select x).Count();
-
-                int nbrOfFemales = (from x in Population
-                                    where x.Gender == Gender.Female && x.IsAlive
-                                    select x).Count();
-            }
         }
         public List<Person> GetPopulation(string csvpath)
         {
@@ -122,6 +109,57 @@ namespace Project_week09
                     újszülött.Gender = (Gender)(rnd.Next(1, 3));
                     Population.Add(újszülött);
                 }
+            }
+        }
+        private void Simulation()
+        {
+            for (int year = 2005; year <= 2024; year++)
+            {
+                for (int i = 0; i < Population.Count; i++)
+                {
+                    Simstep(year, Population[i]);
+                }
+
+                int nbrOfMales = (from x in Population
+                                  where x.Gender == Gender.Male && x.IsAlive
+                                  select x).Count();
+
+                int nbrOfFemales = (from x in Population
+                                    where x.Gender == Gender.Female && x.IsAlive
+                                    select x).Count();
+                for (int i = 0; i < mPopulation.Count; i++)
+                {
+                    nbrOfMales = mPopulation[i];
+                }
+                for (int i = 0; i < fPopulation.Count; i++)
+                {
+                    nbrOfFemales = fPopulation[i];
+                }
+            }
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
+            Population.Clear();
+            Simulation();
+            DisplayResults();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog file = new OpenFileDialog();
+            if (file.ShowDialog()==DialogResult.OK)
+            {
+                textBox1.Text = file.FileName;
+            }
+        }
+        private void DisplayResults()
+        {
+            int counter = 0;
+            for (int year = 2005; year <= numericUpDown1.Value; year++)
+            {
+                richTextBox1.Text += "Szimulációs év" + year + "\n\t Fiúk:" + mPopulation[counter] + "\n\t Lányok:" + fPopulation[counter] + "\n\n";
+                counter++;
             }
         }
     }
