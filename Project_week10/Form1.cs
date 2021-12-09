@@ -25,11 +25,9 @@ namespace Project_week10
             InitializeComponent();
             ga = gc.ActivateDisplay();
             this.Controls.Add(ga);
-
             //gc.AddPlayer();
             //gc.Start(true);
-
-            //gc.GameOver += Gc_GameOver;
+            gc.GameOver += Gc_GameOver;
             for (int i = 0; i < populationSize; i++)
             {
                 gc.AddPlayer(nbrOfSteps);
@@ -55,6 +53,7 @@ namespace Project_week10
 
             if (winners.Count() > 0)
             {
+                button1.Enabled = true;
                 winnerBrain = winners.FirstOrDefault().Brain.Clone();
                 gc.GameOver -= Gc_GameOver;
                 return;
@@ -76,6 +75,15 @@ namespace Project_week10
             }
 
             gc.Start();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gc.ResetCurrentLevel();
+            gc.AddPlayer(winnerBrain.Clone());
+            gc.AddPlayer();
+            ga.Focus();
+            gc.Start(true);
         }
     }
 }
